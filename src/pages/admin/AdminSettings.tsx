@@ -4,6 +4,7 @@ import { AdminLayout } from '../../components/admin/AdminLayout'
 import { supabase } from '../../lib/supabase'
 import { useSiteSettings } from '../../hooks/useSiteSettings'
 import type { SiteSettings } from '../../types'
+import { parseAddress, serializeAddress } from '../../lib/address'
 
 export function AdminSettings() {
   const { settings, refetch } = useSiteSettings()
@@ -12,10 +13,13 @@ export function AdminSettings() {
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [newReason, setNewReason] = useState('')
+  const [mapsUrl, setMapsUrl] = useState('')
 
   useEffect(() => {
     if (settings) {
-      setForm(settings)
+      const parsedAddress = parseAddress(settings.address)
+      setForm({ ...settings, address: parsedAddress.address })
+      setMapsUrl(parsedAddress.mapsUrl)
     }
   }, [settings])
 
@@ -49,8 +53,7 @@ export function AdminSettings() {
         description: form.description,
         phone: form.phone,
         whatsapp: form.whatsapp,
-        address: form.address,
-        maps_url: form.maps_url?.trim() || '',
+        address: serializeAddress(form.address, mapsUrl),
         operating_hours: form.operating_hours,
         service_area: form.service_area,
         hero_title: form.hero_title,
@@ -133,8 +136,8 @@ export function AdminSettings() {
               <input
                 className="input"
                 type="url"
-                value={form.maps_url || ''}
-                onChange={(e) => handleChange('maps_url', e.target.value)}
+                value={mapsUrl}
+                onChange={(e) => setMapsUrl(e.target.value)}
                 placeholder="https://maps.app.goo.gl/..."
               />
               <p className="mt-1.5 text-xs text-neutral-500">Tempel link dari tombol Bagikan di Google Maps. Jika kosong, website akan mencari berdasarkan alamat di atas.</p>

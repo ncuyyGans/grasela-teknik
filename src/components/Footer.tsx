@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom'
 import { MessageCircle, Phone, MapPin, Clock, Mail } from 'lucide-react'
 import { useSiteSettings } from '../hooks/useSiteSettings'
+import { parseAddress } from '../lib/address'
 
 export function Footer() {
   const { settings, loading } = useSiteSettings()
   const waNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '085860895465'
-  const mapsLink = settings?.maps_url?.trim()
-    || (settings?.address
-      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
+  const { address: displayAddress, mapsUrl: savedMapsUrl } = parseAddress(settings?.address)
+  const mapsLink = savedMapsUrl
+    || (displayAddress
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayAddress)}`
       : '')
 
   return (
@@ -55,7 +57,7 @@ export function Footer() {
                   WhatsApp: {settings?.whatsapp || '0858-6089-5465'}
                 </a>
               </li>
-              {settings?.address && (
+              {displayAddress && (
                 <li className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 mt-0.5 text-primary-400 shrink-0" />
                   <a
@@ -63,9 +65,9 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-white hover:underline underline-offset-4 transition-colors"
-                    aria-label={`Buka alamat ${settings.address} di Google Maps`}
+                    aria-label={`Buka alamat ${displayAddress} di Google Maps`}
                   >
-                    {settings.address}
+                    {displayAddress}
                   </a>
                 </li>
               )}
