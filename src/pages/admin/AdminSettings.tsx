@@ -117,7 +117,7 @@ export function AdminSettings() {
 
         {/* Contact Info */}
         <div className="card p-6">
-          <h2 className="font-heading font-semibold text-neutral-900 mb-4">Kontak & Lokasi</h2>
+          <h2 className="font-heading font-semibold text-neutral-900 mb-4">Kontak & Operasional</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="label">Nomor Telepon</label>
@@ -127,11 +127,27 @@ export function AdminSettings() {
               <label className="label">Nomor WhatsApp</label>
               <input className="input" value={form.whatsapp} onChange={(e) => handleChange('whatsapp', e.target.value)} placeholder="085860895465" />
             </div>
-            <div className="sm:col-span-2">
-              <label className="label">Alamat</label>
-              <input className="input" value={form.address} onChange={(e) => handleChange('address', e.target.value)} />
+            <div>
+              <label className="label">Jam Operasional</label>
+              <input className="input" value={form.operating_hours} onChange={(e) => handleChange('operating_hours', e.target.value)} />
             </div>
-            <div className="sm:col-span-2">
+            <div>
+              <label className="label">Area Layanan</label>
+              <input className="input" value={form.service_area} onChange={(e) => handleChange('service_area', e.target.value)} />
+            </div>
+          </div>
+        </div>
+
+        {/* Location */}
+        <div className="card p-6">
+          <h2 className="font-heading font-semibold text-neutral-900 mb-1">Lokasi & Alamat</h2>
+          <p className="text-sm text-neutral-500 mb-4">Alamat ini tampil pada bagian lokasi khusus dan dapat dibuka langsung di Google Maps.</p>
+          <div className="space-y-4">
+            <div>
+              <label className="label">Alamat yang Ditampilkan</label>
+              <input className="input" value={form.address} onChange={(e) => handleChange('address', e.target.value)} placeholder="Masukkan alamat lengkap" />
+            </div>
+            <div>
               <label className="label">Link Google Maps</label>
               <input
                 className="input"
@@ -141,14 +157,6 @@ export function AdminSettings() {
                 placeholder="https://maps.app.goo.gl/..."
               />
               <p className="mt-1.5 text-xs text-neutral-500">Tempel link dari tombol Bagikan di Google Maps. Jika kosong, website akan mencari berdasarkan alamat di atas.</p>
-            </div>
-            <div>
-              <label className="label">Jam Operasional</label>
-              <input className="input" value={form.operating_hours} onChange={(e) => handleChange('operating_hours', e.target.value)} />
-            </div>
-            <div>
-              <label className="label">Area Layanan</label>
-              <input className="input" value={form.service_area} onChange={(e) => handleChange('service_area', e.target.value)} />
             </div>
           </div>
         </div>
