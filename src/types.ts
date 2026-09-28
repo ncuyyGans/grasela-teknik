@@ -6,6 +6,7 @@ export interface SiteSettings {
   phone: string
   whatsapp: string
   address: string
+  maps_url?: string
   operating_hours: string
   service_area: string
   hero_title: string
@@ -37,6 +38,7 @@ export interface Order {
   name: string
   phone: string
   address: string
+  maps_url?: string
   service_type: string
   preferred_date: string
   notes: string

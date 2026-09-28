@@ -5,9 +5,10 @@ import { useSiteSettings } from '../hooks/useSiteSettings'
 export function Footer() {
   const { settings, loading } = useSiteSettings()
   const waNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '085860895465'
-  const mapsLink = settings?.address
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
-    : ''
+  const mapsLink = settings?.maps_url?.trim()
+    || (settings?.address
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
+      : '')
 
   return (
     <footer className="bg-primary-900 text-primary-100">
