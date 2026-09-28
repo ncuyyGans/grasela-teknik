@@ -5,6 +5,9 @@ import { useSiteSettings } from '../hooks/useSiteSettings'
 export function Footer() {
   const { settings, loading } = useSiteSettings()
   const waNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '085860895465'
+  const mapsLink = settings?.address
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
+    : ''
 
   return (
     <footer className="bg-primary-900 text-primary-100">
@@ -54,7 +57,15 @@ export function Footer() {
               {settings?.address && (
                 <li className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 mt-0.5 text-primary-400 shrink-0" />
-                  <span>{settings.address}</span>
+                  <a
+                    href={mapsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white hover:underline underline-offset-4 transition-colors"
+                    aria-label={`Buka alamat ${settings.address} di Google Maps`}
+                  >
+                    {settings.address}
+                  </a>
                 </li>
               )}
               {settings?.operating_hours && (

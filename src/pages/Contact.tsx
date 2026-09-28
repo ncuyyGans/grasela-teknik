@@ -10,6 +10,9 @@ export function Contact() {
   const visibleServices = services.filter((s) => s.visible)
   const waNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '085860895465'
   const waLink = `https://wa.me/62${waNumber.replace(/^0/, '')}`
+  const mapsLink = settings?.address
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
+    : ''
 
   const [form, setForm] = useState({
     name: '',
@@ -93,15 +96,22 @@ export function Contact() {
                 </a>
 
                 {settings?.address && (
-                  <div className="card p-5 flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-accent-50 flex items-center justify-center shrink-0">
+                  <a
+                    href={mapsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="card p-5 flex items-start gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all group"
+                    aria-label={`Buka alamat ${settings.address} di Google Maps`}
+                  >
+                    <div className="w-12 h-12 rounded-lg bg-accent-50 flex items-center justify-center shrink-0 group-hover:bg-accent-100 transition-colors">
                       <MapPin className="w-6 h-6 text-accent-600" />
                     </div>
                     <div>
                       <p className="text-sm text-neutral-500 mb-0.5">Alamat</p>
-                      <p className="font-semibold text-neutral-900">{settings.address}</p>
+                      <p className="font-semibold text-neutral-900 group-hover:text-primary-700 transition-colors">{settings.address}</p>
+                      <p className="text-xs text-primary-600 mt-1">Buka di Google Maps</p>
                     </div>
-                  </div>
+                  </a>
                 )}
 
                 {settings?.operating_hours && (
