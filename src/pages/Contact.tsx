@@ -52,9 +52,9 @@ export function Contact() {
   }
 
   return (
-    <div className="animate-fade-in pt-16">
+    <div className="animate-fade-in pt-20">
       {/* Page Header */}
-      <section className="bg-gradient-to-br from-primary-700 to-accent-600 py-16">
+      <section className="brand-gradient py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <h1 className="text-3xl sm:text-4xl font-heading font-bold mb-3">Kontak & Pemesanan</h1>
           <p className="text-primary-100 max-w-2xl mx-auto">
