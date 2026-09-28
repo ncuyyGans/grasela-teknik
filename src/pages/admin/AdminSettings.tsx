@@ -50,6 +50,7 @@ export function AdminSettings() {
         phone: form.phone,
         whatsapp: form.whatsapp,
         address: form.address,
+        maps_url: form.maps_url?.trim() || '',
         operating_hours: form.operating_hours,
         service_area: form.service_area,
         hero_title: form.hero_title,
@@ -126,6 +127,17 @@ export function AdminSettings() {
             <div className="sm:col-span-2">
               <label className="label">Alamat</label>
               <input className="input" value={form.address} onChange={(e) => handleChange('address', e.target.value)} />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="label">Link Google Maps</label>
+              <input
+                className="input"
+                type="url"
+                value={form.maps_url || ''}
+                onChange={(e) => handleChange('maps_url', e.target.value)}
+                placeholder="https://maps.app.goo.gl/..."
+              />
+              <p className="mt-1.5 text-xs text-neutral-500">Tempel link dari tombol Bagikan di Google Maps. Jika kosong, website akan mencari berdasarkan alamat di atas.</p>
             </div>
             <div>
               <label className="label">Jam Operasional</label>

@@ -10,9 +10,10 @@ export function Contact() {
   const visibleServices = services.filter((s) => s.visible)
   const waNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '085860895465'
   const waLink = `https://wa.me/62${waNumber.replace(/^0/, '')}`
-  const mapsLink = settings?.address
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
-    : ''
+  const mapsLink = settings?.maps_url?.trim()
+    || (settings?.address
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
+      : '')
 
   const [form, setForm] = useState({
     name: '',
