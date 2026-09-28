@@ -5,8 +5,8 @@ const configuredAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | und
 
 export const isSupabaseConfigured = Boolean(configuredUrl && configuredAnonKey)
 
-// Keep the public site renderable when a deployment is missing Vite env vars.
-// Data-backed features still require the real values in the hosting environment.
+// Prevent a blank screen if hosting variables are temporarily unavailable.
+// Production data features use the real Vite values configured in Vercel.
 const supabaseUrl = configuredUrl || 'https://missing-config.supabase.co'
 const supabaseAnonKey = configuredAnonKey || 'missing-anon-key'
 
