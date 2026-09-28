@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Phone, MessageCircle, MapPin, Clock, Send, CheckCircle2 } from 'lucide-react'
+import { Phone, MessageCircle, MapPin, Clock, Send, CheckCircle2, ExternalLink } from 'lucide-react'
 import { useSiteSettings } from '../hooks/useSiteSettings'
 import { useServices } from '../hooks/useServices'
 import { supabase } from '../lib/supabase'
@@ -71,6 +71,33 @@ export function Contact() {
 
       <section className="section-padding bg-neutral-50">
         <div className="container-max">
+          {displayAddress && (
+            <a
+              href={mapsLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card mb-10 overflow-hidden grid grid-cols-1 md:grid-cols-[220px_1fr] group hover:shadow-lg hover:-translate-y-0.5 transition-all"
+              aria-label={`Buka alamat ${displayAddress} di Google Maps`}
+            >
+              <div className="brand-gradient p-6 sm:p-8 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-2xl bg-white/15 border border-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <MapPin className="w-10 h-10 text-white" />
+                </div>
+              </div>
+              <div className="p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+                <div>
+                  <p className="text-primary-600 font-semibold text-xs uppercase tracking-wider mb-2">Lokasi & Alamat</p>
+                  <h2 className="text-xl sm:text-2xl font-heading font-bold text-neutral-900 mb-2">Grasela Teknik</h2>
+                  <p className="text-neutral-600 leading-relaxed">{displayAddress}</p>
+                </div>
+                <span className="btn-primary shrink-0">
+                  Buka Google Maps
+                  <ExternalLink className="w-4 h-4" />
+                </span>
+              </div>
+            </a>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Contact Info */}
             <div>
@@ -97,25 +124,6 @@ export function Contact() {
                     <p className="font-semibold text-neutral-900">{settings?.whatsapp || '0858-6089-5465'}</p>
                   </div>
                 </a>
-
-                {displayAddress && (
-                  <a
-                    href={mapsLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="card p-5 flex items-start gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all group"
-                    aria-label={`Buka alamat ${displayAddress} di Google Maps`}
-                  >
-                    <div className="w-12 h-12 rounded-lg bg-accent-50 flex items-center justify-center shrink-0 group-hover:bg-accent-100 transition-colors">
-                      <MapPin className="w-6 h-6 text-accent-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-neutral-500 mb-0.5">Alamat</p>
-                      <p className="font-semibold text-neutral-900 group-hover:text-primary-700 transition-colors">{displayAddress}</p>
-                      <p className="text-xs text-primary-600 mt-1">Buka di Google Maps</p>
-                    </div>
-                  </a>
-                )}
 
                 {settings?.operating_hours && (
                   <div className="card p-5 flex items-start gap-4">
