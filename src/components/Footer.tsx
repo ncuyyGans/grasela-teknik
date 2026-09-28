@@ -7,19 +7,21 @@ export function Footer() {
   const waNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '085860895465'
 
   return (
-    <footer className="bg-neutral-900 text-neutral-300">
+    <footer className="bg-primary-900 text-primary-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center text-white font-heading font-bold text-lg">
-                GT
-              </div>
+              <img
+                src="/grasela-logo-mark.svg"
+                alt="Logo Grasela Teknik"
+                className="w-12 h-12 rounded-xl object-cover ring-1 ring-white/15"
+              />
               <p className="font-heading font-bold text-white text-lg">
                 {loading ? 'Grasela Teknik' : settings?.business_name || 'Grasela Teknik'}
               </p>
             </div>
-            <p className="text-sm text-neutral-400 leading-relaxed">
+            <p className="text-sm text-primary-200 leading-relaxed">
               {loading ? 'Jasa Service AC & Listrik Profesional' : settings?.tagline || 'Jasa Service AC & Listrik Profesional'}
             </p>
           </div>
@@ -65,11 +67,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-neutral-500">
+        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-primary-300/70">
             &copy; {new Date().getFullYear()} {settings?.business_name || 'Grasela Teknik'}. All rights reserved.
           </p>
-          <Link to="/admin/login" className="text-xs text-neutral-500 hover:text-neutral-300 transition-colors flex items-center gap-1">
+          <Link to="/admin/login" className="text-xs text-primary-300/70 hover:text-white transition-colors flex items-center gap-1">
             <Mail className="w-3 h-3" />
             Admin Panel
           </Link>

@@ -24,8 +24,8 @@ export function Home() {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <section className="relative pt-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-700 via-primary-600 to-accent-600" />
+      <section className="relative pt-20 overflow-hidden">
+        <div className="absolute inset-0 brand-gradient" />
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
@@ -158,7 +158,7 @@ export function Home() {
               </div>
             </div>
 
-            <div className="card p-8 bg-gradient-to-br from-primary-600 to-accent-600 border-0">
+            <div className="card p-8 brand-gradient border-0">
               <h3 className="font-heading font-bold text-white text-xl mb-2">Siap Melayani Kebutuhan Anda</h3>
               <p className="text-primary-100 text-sm mb-6 leading-relaxed">
                 Hubungi kami sekarang untuk konsultasi gratis atau langsung pesan layanan melalui WhatsApp.

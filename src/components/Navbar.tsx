@@ -31,15 +31,17 @@ export function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white/80 backdrop-blur-sm'
+        scrolled ? 'bg-white/95 backdrop-blur-xl border-b border-primary-100 shadow-[0_8px_30px_rgba(27,43,94,0.08)]' : 'bg-white/90 backdrop-blur-md border-b border-white/60'
       }`}
     >
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center text-white font-heading font-bold text-lg shadow-sm group-hover:shadow-md transition-shadow">
-              GT
-            </div>
+            <img
+              src="/grasela-logo-mark.svg"
+              alt="Logo Grasela Teknik"
+              className="w-12 h-12 rounded-xl object-cover shadow-[0_6px_18px_rgba(27,43,94,0.20)] ring-1 ring-primary-200 group-hover:-translate-y-0.5 transition-transform"
+            />
             <div className="hidden sm:block">
               <p className="font-heading font-bold text-neutral-900 text-base leading-tight">
                 {loading ? 'Grasela Teknik' : settings?.business_name || 'Grasela Teknik'}
@@ -57,7 +59,7 @@ export function Navbar() {
                 to={link.to}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   location.pathname === link.to
-                    ? 'text-primary-700 bg-primary-50'
+                    ? 'text-primary-800 bg-primary-50 ring-1 ring-primary-100'
                     : 'text-neutral-600 hover:text-primary-600 hover:bg-neutral-50'
                 }`}
               >
@@ -76,7 +78,7 @@ export function Navbar() {
           </div>
 
           <button
-            className="md:hidden p-2 rounded-lg text-neutral-600 hover:bg-neutral-100"
+            className="md:hidden min-w-11 min-h-11 p-2 rounded-xl text-primary-800 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-400"
             onClick={() => setOpen(!open)}
             aria-label="Menu"
           >
@@ -93,7 +95,7 @@ export function Navbar() {
                   to={link.to}
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                     location.pathname === link.to
-                      ? 'text-primary-700 bg-primary-50'
+                      ? 'text-primary-800 bg-primary-50 ring-1 ring-primary-100'
                       : 'text-neutral-600 hover:bg-neutral-50'
                   }`}
                 >

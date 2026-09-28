@@ -12,9 +12,9 @@ export function Services() {
   const waLink = `https://wa.me/62${waNumber.replace(/^0/, '')}`
 
   return (
-    <div className="animate-fade-in pt-16">
+    <div className="animate-fade-in pt-20">
       {/* Page Header */}
-      <section className="bg-gradient-to-br from-primary-700 to-accent-600 py-16">
+      <section className="brand-gradient py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <h1 className="text-3xl sm:text-4xl font-heading font-bold mb-3">Layanan Kami</h1>
           <p className="text-primary-100 max-w-2xl mx-auto">
@@ -69,7 +69,7 @@ export function Services() {
 
           {/* CTA */}
           <div className="mt-12 text-center">
-            <div className="card p-8 bg-gradient-to-br from-primary-600 to-accent-600 border-0 max-w-2xl mx-auto">
+            <div className="card p-8 brand-gradient border-0 max-w-2xl mx-auto">
               <h3 className="font-heading font-bold text-white text-xl mb-2">Butuh Layanan Lain?</h3>
               <p className="text-primary-100 text-sm mb-6">
                 Hubungi kami untuk konsultasi atau layanan yang tidak tertera di daftar di atas.
