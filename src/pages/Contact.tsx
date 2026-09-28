@@ -3,6 +3,7 @@ import { Phone, MessageCircle, MapPin, Clock, Send, CheckCircle2 } from 'lucide-
 import { useSiteSettings } from '../hooks/useSiteSettings'
 import { useServices } from '../hooks/useServices'
 import { supabase } from '../lib/supabase'
+import { parseAddress } from '../lib/address'
 
 export function Contact() {
   const { settings } = useSiteSettings()
@@ -10,9 +11,10 @@ export function Contact() {
   const visibleServices = services.filter((s) => s.visible)
   const waNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '085860895465'
   const waLink = `https://wa.me/62${waNumber.replace(/^0/, '')}`
-  const mapsLink = settings?.maps_url?.trim()
-    || (settings?.address
-      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
+  const { address: displayAddress, mapsUrl: savedMapsUrl } = parseAddress(settings?.address)
+  const mapsLink = savedMapsUrl
+    || (displayAddress
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayAddress)}`
       : '')
 
   const [form, setForm] = useState({
@@ -96,20 +98,20 @@ export function Contact() {
                   </div>
                 </a>
 
-                {settings?.address && (
+                {displayAddress && (
                   <a
                     href={mapsLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="card p-5 flex items-start gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all group"
-                    aria-label={`Buka alamat ${settings.address} di Google Maps`}
+                    aria-label={`Buka alamat ${displayAddress} di Google Maps`}
                   >
                     <div className="w-12 h-12 rounded-lg bg-accent-50 flex items-center justify-center shrink-0 group-hover:bg-accent-100 transition-colors">
                       <MapPin className="w-6 h-6 text-accent-600" />
                     </div>
                     <div>
                       <p className="text-sm text-neutral-500 mb-0.5">Alamat</p>
-                      <p className="font-semibold text-neutral-900 group-hover:text-primary-700 transition-colors">{settings.address}</p>
+                      <p className="font-semibold text-neutral-900 group-hover:text-primary-700 transition-colors">{displayAddress}</p>
                       <p className="text-xs text-primary-600 mt-1">Buka di Google Maps</p>
                     </div>
                   </a>
