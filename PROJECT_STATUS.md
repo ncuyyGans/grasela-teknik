@@ -156,6 +156,11 @@ Production Branch: main
 
 Vercel dapat mendeteksi sebagian besar pengaturan tersebut secara otomatis. Jika pengaturan di dashboard berbeda, prioritaskan script pada `package.json` dan hasil build aktual project.
 
+`vercel.json` di root repository berisi rewrite SPA: semua path non-file
+(`/(.*)`) di-rewrite ke `/index.html` agar route React Router seperti
+`/admin/login` tetap bisa dibuka langsung/di-refresh tanpa 404 dari Vercel
+(ditambahkan 2026-10-19 karena `/admin/login` me-return 404 saat diakses langsung).
+
 ### Environment variables
 
 Client Supabase menggunakan variable berikut:
