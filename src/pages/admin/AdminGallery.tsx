@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react'
-import { Upload, Trash2, X, Save, GripVertical, ImageIcon } from 'lucide-react'
+import { Upload, Trash2, Save, GripVertical, ImageIcon } from 'lucide-react'
 import { AdminLayout } from '../../components/admin/AdminLayout'
 import { useGallery } from '../../hooks/useGallery'
-import { supabase, GALLERY_BUCKET } from '../../lib/supabase'
+import { ID, tables, storage, DATABASE_ID, COLLECTIONS, GALLERY_BUCKET, galleryFileUrl } from '../../lib/appwrite'
 import type { GalleryItem } from '../../types'
 
 export function AdminGallery() {
@@ -22,29 +22,14 @@ export function AdminGallery() {
 
     try {
       for (const file of Array.from(files)) {
-        const ext = file.name.split('.').pop()
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`
-        const filePath = `${fileName}`
+        const uploaded = await storage.createFile(GALLERY_BUCKET, ID.unique(), file)
 
-        const { error: uploadError } = await supabase.storage
-          .from(GALLERY_BUCKET)
-          .upload(filePath, file)
-
-        if (uploadError) throw uploadError
-
-        const { data: urlData } = supabase.storage
-          .from(GALLERY_BUCKET)
-          .getPublicUrl(filePath)
-
-        const { error: insertError } = await supabase
-          .from('gallery')
-          .insert({
-            image_url: urlData.publicUrl,
-            title: file.name.replace(/\.[^/.]+$/, ''),
-            sort_order: gallery.length + 1,
-          })
-
-        if (insertError) throw insertError
+        await tables.createRow(DATABASE_ID, COLLECTIONS.GALLERY, ID.unique(), {
+          image_url: galleryFileUrl(uploaded.$id),
+          title: file.name.replace(/\.[^/.]+$/, ''),
+          sort_order: gallery.length + 1,
+          storage_file_id: uploaded.$id,
+        })
       }
       refetch()
     } catch (err) {
@@ -58,22 +43,25 @@ export function AdminGallery() {
   const handleDelete = async (item: GalleryItem) => {
     if (!confirm('Hapus foto ini?')) return
 
-    const path = item.image_url.split('/gallery/').pop()
-    if (path) {
-      await supabase.storage.from(GALLERY_BUCKET).remove([path])
+    if (item.storage_file_id) {
+      try {
+        await storage.deleteFile(GALLERY_BUCKET, item.storage_file_id)
+      } catch {
+        // file may already be gone; still remove the document
+      }
     }
-    await supabase.from('gallery').delete().eq('id', item.id)
+    await tables.deleteRow(DATABASE_ID, COLLECTIONS.GALLERY, item.id)
     refetch()
   }
 
   const handleSaveTitle = async (id: string) => {
-    await supabase.from('gallery').update({ title: titleValue }).eq('id', id)
+    await tables.updateRow(DATABASE_ID, COLLECTIONS.GALLERY, id, { title: titleValue })
     setEditingTitle(null)
     refetch()
   }
 
   const handleSortChange = async (item: GalleryItem, newOrder: number) => {
-    await supabase.from('gallery').update({ sort_order: newOrder }).eq('id', item.id)
+    await tables.updateRow(DATABASE_ID, COLLECTIONS.GALLERY, item.id, { sort_order: newOrder })
     refetch()
   }
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { MessageCircle, Trash2, Calendar, MapPin, Phone, StickyNote, X } from 'lucide-react'
 import { AdminLayout } from '../../components/admin/AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { Query, tables, DATABASE_ID, COLLECTIONS, mapOrder } from '../../lib/appwrite'
 import type { Order } from '../../types'
 
 const statusConfig = {
@@ -19,13 +19,14 @@ export function AdminOrders() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
 
   const fetchOrders = async () => {
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (!error && data) {
-      setOrders(data as Order[])
+    try {
+      const res = await tables.listRows(DATABASE_ID, COLLECTIONS.ORDERS, [
+        Query.orderDesc('$createdAt'),
+        Query.limit(100),
+      ])
+      setOrders(res.rows.map(mapOrder))
+    } catch {
+      // backend unavailable; keep empty list
     }
     setLoading(false)
   }
@@ -35,7 +36,7 @@ export function AdminOrders() {
   }, [])
 
   const handleStatusChange = async (order: Order, status: StatusKey) => {
-    await supabase.from('orders').update({ status }).eq('id', order.id)
+    await tables.updateRow(DATABASE_ID, COLLECTIONS.ORDERS, order.id, { status })
     setOrders(orders.map((o) => (o.id === order.id ? { ...o, status } : o)))
     if (selectedOrder?.id === order.id) {
       setSelectedOrder({ ...order, status })
@@ -44,7 +45,7 @@ export function AdminOrders() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Hapus pesanan ini?')) return
-    await supabase.from('orders').delete().eq('id', id)
+    await tables.deleteRow(DATABASE_ID, COLLECTIONS.ORDERS, id)
     setOrders(orders.filter((o) => o.id !== id))
     setSelectedOrder(null)
   }

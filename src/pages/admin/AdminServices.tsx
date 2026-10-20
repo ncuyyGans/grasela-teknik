@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Plus, Trash2, Pencil, X, GripVertical, Eye, EyeOff, Save } from 'lucide-react'
 import { AdminLayout } from '../../components/admin/AdminLayout'
 import { useServices } from '../../hooks/useServices'
-import { supabase } from '../../lib/supabase'
+import { ID, tables, DATABASE_ID, COLLECTIONS } from '../../lib/appwrite'
 import { getServiceIcon, availableIcons } from '../../lib/icons'
 import type { Service } from '../../types'
 
@@ -28,10 +28,10 @@ export function AdminServices() {
     setSaving(true)
     setError(null)
 
+    let failed = false
     if (svc.id) {
-      const { error: updateError } = await supabase
-        .from('services')
-        .update({
+      try {
+        await tables.updateRow(DATABASE_ID, COLLECTIONS.SERVICES, svc.id, {
           name: svc.name,
           description: svc.description,
           price: svc.price,
@@ -39,12 +39,13 @@ export function AdminServices() {
           sort_order: svc.sort_order,
           visible: svc.visible,
         })
-        .eq('id', svc.id)
-      if (updateError) setError('Gagal menyimpan perubahan.')
+      } catch {
+        setError('Gagal menyimpan perubahan.')
+        failed = true
+      }
     } else {
-      const { error: insertError } = await supabase
-        .from('services')
-        .insert({
+      try {
+        await tables.createRow(DATABASE_ID, COLLECTIONS.SERVICES, ID.unique(), {
           name: svc.name,
           description: svc.description,
           price: svc.price,
@@ -52,11 +53,14 @@ export function AdminServices() {
           sort_order: svc.sort_order,
           visible: svc.visible,
         })
-      if (insertError) setError('Gagal menambah layanan.')
+      } catch {
+        setError('Gagal menambah layanan.')
+        failed = true
+      }
     }
 
     setSaving(false)
-    if (!error) {
+    if (!failed) {
       setShowForm(false)
       setEditing(null)
       refetch()
@@ -65,12 +69,12 @@ export function AdminServices() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Hapus layanan ini?')) return
-    await supabase.from('services').delete().eq('id', id)
+    await tables.deleteRow(DATABASE_ID, COLLECTIONS.SERVICES, id)
     refetch()
   }
 
   const toggleVisible = async (svc: Service) => {
-    await supabase.from('services').update({ visible: !svc.visible }).eq('id', svc.id)
+    await tables.updateRow(DATABASE_ID, COLLECTIONS.SERVICES, svc.id, { visible: !svc.visible })
     refetch()
   }
 

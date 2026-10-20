@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { supabase } from '../lib/supabase'
+import { Query } from 'appwrite'
+import { tables, DATABASE_ID, COLLECTIONS, mapGalleryItem } from '../lib/appwrite'
 import type { GalleryItem } from '../types'
 
 export function useGallery() {
@@ -7,13 +8,14 @@ export function useGallery() {
   const [loading, setLoading] = useState(true)
 
   const fetchGallery = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('gallery')
-      .select('*')
-      .order('sort_order', { ascending: true })
-
-    if (!error && data) {
-      setGallery(data as GalleryItem[])
+    try {
+      const res = await tables.listRows(DATABASE_ID, COLLECTIONS.GALLERY, [
+        Query.orderAsc('sort_order'),
+        Query.limit(100),
+      ])
+      setGallery(res.rows.map(mapGalleryItem))
+    } catch {
+      // keep previous state; backend may be temporarily unavailable
     }
     setLoading(false)
   }, [])

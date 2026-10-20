@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { supabase } from '../lib/supabase'
+import { tables, DATABASE_ID, COLLECTIONS, SETTINGS_DOC_ID, mapSettings } from '../lib/appwrite'
 import type { SiteSettings } from '../types'
 
 let cachedSettings: SiteSettings | null = null
@@ -9,15 +9,12 @@ export function useSiteSettings() {
   const [loading, setLoading] = useState(!cachedSettings)
 
   const fetchSettings = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('site_settings')
-      .select('*')
-      .eq('id', 1)
-      .maybeSingle()
-
-    if (!error && data) {
-      cachedSettings = data as SiteSettings
-      setSettings(data as SiteSettings)
+    try {
+      const doc = await tables.getRow(DATABASE_ID, COLLECTIONS.SETTINGS, SETTINGS_DOC_ID)
+      cachedSettings = mapSettings(doc)
+      setSettings(cachedSettings)
+    } catch {
+      // settings document may not exist yet; keep cached state
     }
     setLoading(false)
   }, [])

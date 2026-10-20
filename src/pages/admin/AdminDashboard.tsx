@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Wrench, Image, ClipboardList, Settings, ArrowRight, Clock } from 'lucide-react'
 import { AdminLayout } from '../../components/admin/AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { Query, tables, DATABASE_ID, COLLECTIONS } from '../../lib/appwrite'
 
 interface DashboardStats {
   servicesCount: number
@@ -22,19 +22,23 @@ export function AdminDashboard() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      const [services, gallery, orders, newOrders] = await Promise.all([
-        supabase.from('services').select('id', { count: 'exact', head: true }),
-        supabase.from('gallery').select('id', { count: 'exact', head: true }),
-        supabase.from('orders').select('id', { count: 'exact', head: true }),
-        supabase.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'baru'),
+      const countOf = async (collection: string, queries: string[] = []) => {
+        try {
+          const res = await tables.listRows(DATABASE_ID, collection, [Query.limit(1), ...queries])
+          return res.total
+        } catch {
+          return 0
+        }
+      }
+
+      const [servicesCount, galleryCount, ordersCount, newOrdersCount] = await Promise.all([
+        countOf(COLLECTIONS.SERVICES),
+        countOf(COLLECTIONS.GALLERY),
+        countOf(COLLECTIONS.ORDERS),
+        countOf(COLLECTIONS.ORDERS, [Query.equal('status', 'baru')]),
       ])
 
-      setStats({
-        servicesCount: services.count ?? 0,
-        galleryCount: gallery.count ?? 0,
-        ordersCount: orders.count ?? 0,
-        newOrdersCount: newOrders.count ?? 0,
-      })
+      setStats({ servicesCount, galleryCount, ordersCount, newOrdersCount })
       setLoading(false)
     }
     fetchStats()

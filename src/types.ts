@@ -1,5 +1,5 @@
 export interface SiteSettings {
-  id: number
+  id: string
   business_name: string
   tagline: string
   description: string
@@ -29,6 +29,7 @@ export interface GalleryItem {
   image_url: string
   title: string
   sort_order: number
+  storage_file_id?: string
   created_at: string
 }
 

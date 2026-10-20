@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Phone, MessageCircle, MapPin, Clock, Send, CheckCircle2, ExternalLink } from 'lucide-react'
 import { useSiteSettings } from '../hooks/useSiteSettings'
 import { useServices } from '../hooks/useServices'
-import { supabase } from '../lib/supabase'
+import { ID, tables, DATABASE_ID, COLLECTIONS } from '../lib/appwrite'
 import { parseAddress } from '../lib/address'
 
 export function Contact() {
@@ -38,14 +38,20 @@ export function Contact() {
     setSubmitting(true)
     setError(null)
 
-    const { error: insertError } = await supabase.from('orders').insert({
-      name: form.name,
-      phone: form.phone,
-      address: form.address,
-      service_type: form.service_type,
-      preferred_date: form.preferred_date,
-      notes: form.notes,
-    })
+    let insertError = false
+    try {
+      await tables.createRow(DATABASE_ID, COLLECTIONS.ORDERS, ID.unique(), {
+        name: form.name,
+        phone: form.phone,
+        address: form.address,
+        service_type: form.service_type,
+        preferred_date: form.preferred_date,
+        notes: form.notes,
+        status: 'baru',
+      })
+    } catch {
+      insertError = true
+    }
 
     if (insertError) {
       setError('Terjadi kesalahan saat mengirim pesanan. Silakan coba lagi atau hubungi kami via WhatsApp.')

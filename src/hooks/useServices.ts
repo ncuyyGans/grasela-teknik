@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { supabase } from '../lib/supabase'
+import { Query } from 'appwrite'
+import { tables, DATABASE_ID, COLLECTIONS, mapService } from '../lib/appwrite'
 import type { Service } from '../types'
 
 export function useServices() {
@@ -7,13 +8,14 @@ export function useServices() {
   const [loading, setLoading] = useState(true)
 
   const fetchServices = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('services')
-      .select('*')
-      .order('sort_order', { ascending: true })
-
-    if (!error && data) {
-      setServices(data as Service[])
+    try {
+      const res = await tables.listRows(DATABASE_ID, COLLECTIONS.SERVICES, [
+        Query.orderAsc('sort_order'),
+        Query.limit(100),
+      ])
+      setServices(res.rows.map(mapService))
+    } catch {
+      // keep previous state; backend may be temporarily unavailable
     }
     setLoading(false)
   }, [])

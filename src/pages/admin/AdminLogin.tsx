@@ -4,7 +4,7 @@ import { Lock, Mail, LogIn, UserPlus, AlertCircle } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 export function AdminLogin() {
-  const { signIn, signUp, session, isAdmin, loading } = useAuth()
+  const { signIn, signUp, user, isAdmin, loading } = useAuth()
   const navigate = useNavigate()
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [email, setEmail] = useState('')
@@ -20,7 +20,7 @@ export function AdminLogin() {
     )
   }
 
-  if (session && isAdmin) {
+  if (user && isAdmin) {
     return <Navigate to="/admin" replace />
   }
 
@@ -106,7 +106,7 @@ export function AdminLogin() {
                   id="password"
                   type="password"
                   required
-                  minLength={6}
+                  minLength={8}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input pl-10"

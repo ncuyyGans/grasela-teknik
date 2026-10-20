@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Save, CheckCircle2, AlertCircle, Plus, Trash2 } from 'lucide-react'
 import { AdminLayout } from '../../components/admin/AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { tables, DATABASE_ID, COLLECTIONS, SETTINGS_DOC_ID } from '../../lib/appwrite'
 import { useSiteSettings } from '../../hooks/useSiteSettings'
 import type { SiteSettings } from '../../types'
 import { parseAddress, serializeAddress } from '../../lib/address'
@@ -45,9 +45,9 @@ export function AdminSettings() {
     setError(null)
     setSaved(false)
 
-    const { error: updateError } = await supabase
-      .from('site_settings')
-      .update({
+    let updateError = false
+    try {
+      await tables.updateRow(DATABASE_ID, COLLECTIONS.SETTINGS, SETTINGS_DOC_ID, {
         business_name: form.business_name,
         tagline: form.tagline,
         description: form.description,
@@ -59,9 +59,10 @@ export function AdminSettings() {
         hero_title: form.hero_title,
         hero_subtitle: form.hero_subtitle,
         why_choose_us: form.why_choose_us,
-        updated_at: new Date().toISOString(),
       })
-      .eq('id', 1)
+    } catch {
+      updateError = true
+    }
 
     if (updateError) {
       setError('Gagal menyimpan perubahan. Silakan coba lagi.')
